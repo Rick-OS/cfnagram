@@ -4,7 +4,7 @@
       <div class="col-12 col-sm-8">
         <q-card
           v-for="post in posts"
-          :key = post.id
+          :key = "post.id"
           class="card-post q-mb-md"
           bordered
           flat

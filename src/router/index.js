@@ -43,10 +43,11 @@ export default function (/* { store, ssrContext } */) {
     console.log('isAuthenticated:', isAuthenticated)
     if (isProtected) {
       console.info(`Page ${to.fullPath} requires Auth!`)
+      console.info(`Page name ${to.name} requires Auth!`)
+      
       if (!isAuthenticated) {
         try {
-          // await store.dispatch('profile/getSession')
-          next("/Auth")
+          await store.dispatch('profile/getSession')
         } catch (err) {
           next({ name: 'auth', query: { redirectTo: to.name } })
         }

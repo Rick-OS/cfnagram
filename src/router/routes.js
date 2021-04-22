@@ -10,6 +10,7 @@ const routes = [
       },
       { 
         path: '/camera', 
+        name: 'camera',
         component: () => import('pages/PageCamera.vue'),
         meta: { requiresAuth: true }
       },
@@ -23,6 +24,7 @@ const routes = [
         path: '/auth',
         name: 'auth',
         component: () => import('pages/Authentication.vue'),
+        props: (route) => ({ ...route.params, ...route.query }) // converts query strings and params to props
       },
       // Always leave this as last one,
       // but you can also remove it

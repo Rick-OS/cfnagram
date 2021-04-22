@@ -65,7 +65,6 @@ export default {
     return {
       authState: undefined,
       user: undefined,
-      
     }
   }
 }
