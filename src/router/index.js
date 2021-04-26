@@ -36,7 +36,7 @@ export default function (/* { store, ssrContext } */) {
    * @param {Object} next - Next route navigation
    * @returns {Object} next - Next route
    */
-   Router.beforeResolve(async (to, from, next) => {
+   Router.beforeEach(async (to, from, next) => {
     const isProtected = to.matched.some((record) => record.meta.requiresAuth)
     const isAuthenticated = await Auth.currentUserInfo();
     console.log('isProtected:', isProtected)

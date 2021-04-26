@@ -47,15 +47,14 @@ export async function getSession({ commit, getters }) {
   console.log('Fetching current session')
   try {
     const user = await Auth.currentAuthenticatedUser()
+    console.log('User: ', user)
     if (!getters.isAuthenticated) {
       commit('SET_USER', user)
-      console.log('User Object is: ', user)
     }
   } catch (err) {
     console.log(err)
     if (getters.isAuthenticated) {
       commit('SET_USER')
-      console.log('User Object is: ', user)
     }
     throw new Error(err)
   }
