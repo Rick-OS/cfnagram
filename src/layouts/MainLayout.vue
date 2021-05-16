@@ -46,6 +46,7 @@
 
 <script>
 import { auth_logout } from 'src/boot/amplify';
+import { auth } from '../pages/Authentication'
 import { mapGetters } from "vuex";
 
 export default {
