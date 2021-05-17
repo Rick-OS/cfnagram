@@ -28,6 +28,32 @@
           flat
           round
         />
+        <q-btn
+          class="large-screen-only"
+          color="white-10"
+          icon="eva-options-outline"
+          size="20px"
+          flat
+          round
+          >
+          <q-menu
+            transition-show="flip-right"
+            transition-hide="flip-left"
+            >
+            <q-list style="min-width: 100px">
+              <q-item clickable to="/settings">
+                <q-item-section>App Settings</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Preferences</q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable @click="logout" to="/">
+                <q-item-section>Logout</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-header>
     <q-footer class="bg-white small-screen-only" elevated>
