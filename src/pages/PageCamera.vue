@@ -28,9 +28,25 @@
       </q-file>
       <div class="row justify-center q-ma-md">
         <q-input
-          v-model="post.solution"
+          v-model="post.customername"
           class="col col-sm-6"
-          label="Solution Name"
+          label="Customer Name"
+          dense></q-input
+          >
+      </div>
+      <div class="row justify-center q-ma-md">
+        <q-input
+          v-model="post.projectname"
+          class="col col-sm-6"
+          label="Project Name"
+          dense></q-input
+          >
+      </div>
+      <div class="row justify-center q-ma-md">
+        <q-input
+          v-model="post.capturedimage"
+          class="col col-sm-6"
+          label="Image Name"
           dense></q-input
         >
       </div>
@@ -72,7 +88,9 @@ export default {
     return{
       post:{
         id: uid(),
-        solution:'',
+        customername:'',
+        capturedimage:'',
+        projectname:'',
         location:'',
         photo:null,
         date:Date.now()
@@ -111,17 +129,16 @@ export default {
     captureImage() {
       let video = this.$refs.video
       let canvas = this.$refs.canvas
-
       canvas.width = video.getBoundingClientRect().width
       canvas.height = video.getBoundingClientRect().height
       let context = canvas.getContext('2d')
       context.drawImage(video, 0, 0, canvas.width, canvas.height)
       console.log("CapturedImaged")
       this.imageCaptured = true
-      let filename = `${Date.now()}.jpg`
+      
       this.post.photo = this.dataURItoBlob(canvas.toDataURL())
       let imageblob = this.post.photo
-      this.uploadImage(filename, imageblob)
+      this.uploadImage(imageblob)
       this.disableCamera()
     },
     disableCamera(){
@@ -204,7 +221,16 @@ export default {
       })
       this.locationLoading = false
     },
-    uploadImage(filename, blob){
+    uploadImage(blob){
+      
+      if (this.post.customername && this.post.customername){
+        var filename = `${ this.post.customername }/${ this.post.projectname }/${ this.post.capturedimage }-${Date.now("dd-mm-yyyy")}.jpg`.toLowerCase();
+      }else if(this.post.projectname){
+        var filename = `${ this.post.projectname }/${ this.post.capturedimage }-${Date.now("dd-mm-yyyy")}.jpg`.toLowerCase();
+      }else{
+        var filename = `${ this.post.capturedimage }-${Date.now("dd-mm-yyyy")}.jpg`.toLowerCase();
+      }
+      console.log("Filename: ", filename)
       let s3Upload = Amplify.Storage.vault.put(filename, blob, {
       contentType: 'iamge/jpg'
       });   
