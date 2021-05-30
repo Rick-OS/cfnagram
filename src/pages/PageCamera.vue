@@ -62,6 +62,7 @@
 
 <script>
 import { uid } from 'quasar'
+import Amplify, { Auth, Storage } from 'aws-amplify';
 import { Logger } from '@aws-amplify/core'
 import { mapState, mapGetters } from 'vuex'
 
@@ -117,7 +118,10 @@ export default {
       context.drawImage(video, 0, 0, canvas.width, canvas.height)
       console.log("CapturedImaged")
       this.imageCaptured = true
+      let filename = `${Date.now()}.jpg`
       this.post.photo = this.dataURItoBlob(canvas.toDataURL())
+      let imageblob = this.post.photo
+      this.uploadImage(filename, imageblob)
       this.disableCamera()
     },
     disableCamera(){
@@ -199,6 +203,11 @@ export default {
         message: 'Error Getting Location.'
       })
       this.locationLoading = false
+    },
+    uploadImage(filename, blob){
+      let s3Upload = Amplify.Storage.vault.put(filename, blob, {
+      contentType: 'iamge/jpg'
+      });   
     }
   },
   mounted() {

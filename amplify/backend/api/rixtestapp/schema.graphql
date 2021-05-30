@@ -1,0 +1,10 @@
+type Whiteboaards @model {
+    id: ID!
+    captureDate: String!
+    captureDescription: String!
+    capturePageNum: Int!
+    customerID: Int!
+    pattern: String!
+    captureLocation: String!
+
+}

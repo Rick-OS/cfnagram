@@ -1,4 +1,6 @@
 {
+    "identityPoolName": "cfnagram_identitypool_4064665b",
+    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "rixtes3b31202b",
     "userPoolName": "cfnagram_pool",
     "autoVerifiedAttributes": [
@@ -31,7 +33,7 @@
     "userpoolClientSetAttributes": false,
     "sharedId": "3b31202b",
     "resourceName": "cfnagram",
-    "authSelections": "userPoolOnly",
+    "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
