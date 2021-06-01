@@ -113,8 +113,9 @@ export default {
       await this.$store.dispatch("auth/logout");
       this.$router.push("/");
     }
+  },
   }
-}
+
 </script>
 
 <style lang="sass">
