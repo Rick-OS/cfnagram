@@ -1,4 +1,4 @@
-# app (rix-test-app)
+# app (CFN-a-GRAM)
 
 A Quasar Framework app
 
