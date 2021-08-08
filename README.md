@@ -1,4 +1,4 @@
-# app (CFN-a-GRAM)
+# application (CFN-a-GRAM)
 
 A Quasar Framework app to upload whiteboard diagrams
 
