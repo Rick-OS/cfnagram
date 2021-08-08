@@ -1,6 +1,6 @@
 # app (CFN-a-GRAM)
 
-A Quasar Framework app
+A Quasar Framework app to upload whiteboard diagrams
 
 ## Install the dependencies
 ```bash
