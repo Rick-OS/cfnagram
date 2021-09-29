@@ -10,7 +10,7 @@
           dense>
           </q-input>
       <div class="row justify-center q-ma-md">
-        <q-btn @click="GetWhiteboards" rounded color="primary" label="Update Settings" />
+        <q-btn rounded color="primary" label="Update Settings" />
       </div>
     </div>
   </q-page>
@@ -20,9 +20,7 @@
 import { uid } from 'quasar'
 import { Logger } from '@aws-amplify/core'
 import { mapState, mapGetters } from 'vuex'
-import API, { graphqlOperation } from "@aws-amplify/api";
-import { listWhiteboaardss } from "src/graphql/queries";
-import { fetchWhiteboards } from '../store/whiteboards/actions'
+// import API, { graphqlOperation } from "@aws-amplify/api";
 
 export default {
   name: 'PageAppSettings',
@@ -47,9 +45,7 @@ export default {
     },
   },
   methods: {
-    GetWhiteboards(){
-      fetchWhiteboards();
-    }
+    
   }
 }
 

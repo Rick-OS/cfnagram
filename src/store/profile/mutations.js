@@ -38,5 +38,6 @@
  * @see {@link getSession} for more info on action that calls SET_USER
  */
 export const SET_USER = (state, username) => {
+  console.log('Adding User details to Store', username)
   state.user = username
 }

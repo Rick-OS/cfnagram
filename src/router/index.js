@@ -39,15 +39,26 @@ export default function (/* { store, ssrContext } */) {
    Router.beforeEach(async (to, from, next) => {
     const isProtected = to.matched.some((record) => record.meta.requiresAuth)
     const isAuthenticated = await Auth.currentUserInfo();
-    console.log('isProtected:', isProtected)
-    console.log('isAuthenticated:', isAuthenticated)
-    if (isProtected && !isAuthenticated) {
-      console.info(`Page ${to.fullPath} requires Auth!`)      
+    // if (isProtected && !isAuthenticated) {
+    //   console.info(`Page ${to.fullPath} requires Auth!`)      
+    //     try {
+    //       await store.dispatch('profile/getSession')
+    //     } catch (err) {
+    //       next({ name: 'auth', query: { redirectTo: to.name } })
+    //     }
+    // }
+    if (isProtected) {
+      console.log('isProtected:', isProtected)
+      console.info(`Page ${to.fullPath} requires Auth!`)
+      if (!store.getters['profile/isAuthenticated']) {
         try {
+          console.log('dispatching profile/getSession:')
           await store.dispatch('profile/getSession')
+          next()
         } catch (err) {
           next({ name: 'auth', query: { redirectTo: to.name } })
         }
+      }
     }
     else next()
   })

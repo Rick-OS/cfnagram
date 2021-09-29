@@ -1,6 +1,6 @@
 {
     "identityPoolName": "cfnagram_identitypool_4064665b",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "rixtes3b31202b",
     "userPoolName": "cfnagram_pool",
     "autoVerifiedAttributes": [
@@ -21,6 +21,7 @@
         "email",
         "name"
     ],
+    "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [

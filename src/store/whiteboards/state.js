@@ -6,5 +6,5 @@
  * @see {@link getSession} for more info on action
  */
 export default {
-  user: ''
+  whiteboards: []
 }

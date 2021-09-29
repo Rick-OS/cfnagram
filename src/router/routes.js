@@ -6,7 +6,8 @@ const routes = [
     children: [
       { 
         path: '', 
-        component: () => import('pages/PageHome.vue')
+        component: () => import('pages/PageHome.vue'),
+        meta: { requiresAuth: true }
       },
       { 
         path: '/camera', 

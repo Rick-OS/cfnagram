@@ -1,46 +1,40 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateWhiteboaards = /* GraphQL */ `
-  subscription OnCreateWhiteboaards {
-    onCreateWhiteboaards {
+export const onCreatePost = /* GraphQL */ `
+  subscription OnCreatePost {
+    onCreatePost {
       id
-      captureDate
-      captureDescription
-      capturePageNum
-      customerID
-      pattern
-      captureLocation
+      name
+      location
+      description
+      image
       createdAt
       updatedAt
     }
   }
 `;
-export const onUpdateWhiteboaards = /* GraphQL */ `
-  subscription OnUpdateWhiteboaards {
-    onUpdateWhiteboaards {
+export const onUpdatePost = /* GraphQL */ `
+  subscription OnUpdatePost {
+    onUpdatePost {
       id
-      captureDate
-      captureDescription
-      capturePageNum
-      customerID
-      pattern
-      captureLocation
+      name
+      location
+      description
+      image
       createdAt
       updatedAt
     }
   }
 `;
-export const onDeleteWhiteboaards = /* GraphQL */ `
-  subscription OnDeleteWhiteboaards {
-    onDeleteWhiteboaards {
+export const onDeletePost = /* GraphQL */ `
+  subscription OnDeletePost {
+    onDeletePost {
       id
-      captureDate
-      captureDescription
-      capturePageNum
-      customerID
-      pattern
-      captureLocation
+      name
+      location
+      description
+      image
       createdAt
       updatedAt
     }

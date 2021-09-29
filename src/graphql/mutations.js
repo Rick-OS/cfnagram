@@ -1,55 +1,49 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createWhiteboaards = /* GraphQL */ `
-  mutation CreateWhiteboaards(
-    $input: CreateWhiteboaardsInput!
-    $condition: ModelWhiteboaardsConditionInput
+export const createPost = /* GraphQL */ `
+  mutation CreatePost(
+    $input: CreatePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    createWhiteboaards(input: $input, condition: $condition) {
+    createPost(input: $input, condition: $condition) {
       id
-      captureDate
-      captureDescription
-      capturePageNum
-      customerID
-      pattern
-      captureLocation
+      name
+      location
+      description
+      image
       createdAt
       updatedAt
     }
   }
 `;
-export const updateWhiteboaards = /* GraphQL */ `
-  mutation UpdateWhiteboaards(
-    $input: UpdateWhiteboaardsInput!
-    $condition: ModelWhiteboaardsConditionInput
+export const updatePost = /* GraphQL */ `
+  mutation UpdatePost(
+    $input: UpdatePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    updateWhiteboaards(input: $input, condition: $condition) {
+    updatePost(input: $input, condition: $condition) {
       id
-      captureDate
-      captureDescription
-      capturePageNum
-      customerID
-      pattern
-      captureLocation
+      name
+      location
+      description
+      image
       createdAt
       updatedAt
     }
   }
 `;
-export const deleteWhiteboaards = /* GraphQL */ `
-  mutation DeleteWhiteboaards(
-    $input: DeleteWhiteboaardsInput!
-    $condition: ModelWhiteboaardsConditionInput
+export const deletePost = /* GraphQL */ `
+  mutation DeletePost(
+    $input: DeletePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    deleteWhiteboaards(input: $input, condition: $condition) {
+    deletePost(input: $input, condition: $condition) {
       id
-      captureDate
-      captureDescription
-      capturePageNum
-      customerID
-      pattern
-      captureLocation
+      name
+      location
+      description
+      image
       createdAt
       updatedAt
     }

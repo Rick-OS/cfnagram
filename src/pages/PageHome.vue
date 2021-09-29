@@ -3,7 +3,7 @@
     <div class="row q-col-gutter-lg">
       <div class="col-12 col-sm-8">
         <q-card
-          v-for="post in posts"
+          v-for="post in whiteboards"
           :key = "post.id"
           class="card-post q-mb-md"
           bordered
@@ -17,21 +17,21 @@
         </q-item-section>
 
         <q-item-section>
-          <q-item-label class="text-bold">Rickos</q-item-label>
+          <q-item-label class="text-bold">{{user.attributes.name}}</q-item-label>
           <q-item-label caption class="text-bold">
-            {{post.customer}}
+            {{post.name}}
           </q-item-label>
           <q-item-label caption >
-            {{post.solution}}
+            {{post.location}}
           </q-item-label>
         </q-item-section>
       </q-item>
 
       <q-separator />
         <q-card class="my-card">
-          <img :src="post.imageUrl">
+          <img :src="post.image">
         <q-card-section class="text-grey-6">
-          {{post.location}}
+          {{post.description}}
           <div>{{post.date | niceDate}}</div>
           
         </q-card-section>
@@ -53,9 +53,8 @@
           </q-item-section>
 
           <q-item-section>
-            <q-item-label class="text-bold">Rickos</q-item-label>
+            <q-item-label class="text-bold">{{user.attributes.name}}</q-item-label>
             <q-item-label caption class="text-bold">
-              Rickos
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -66,41 +65,13 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import { date } from 'quasar'
 export default {
   name: 'PageHome',
-  data() {
-    return {
-      posts: [
-        {
-          id: 1,
-          customer: "AMP Bank",
-          caption:"Project 1",
-          solution:"Generate Tables",
-          date: 123456765432345,
-          location: "Melbourne, Victoria, Australia",
-          imageUrl: "https://d2908q01vomqb2.cloudfront.net/b7eb6c689c037217079766fdb77c3bac3e51cb4c/2019/05/18/cfn-tables-arch-diagram-1024x508.png",
-        },
-        {
-          id: 2,
-          customer: "Ricks Bank",
-          caption:"Project 2",
-          solution:"Simple ML Solution",
-          date: 123456765432345,
-          location: "Sydney, NSW, Australia",
-          imageUrl: "https://i.pinimg.com/originals/76/0d/36/760d36c608114d6eeb2831ca04e7a9a7.png",
-        },
-        {
-          id: 3,
-          customer: "Cams Bank",
-          caption:"Project Z",
-          solution:"Cams Solution",
-          date: 123456765432345,
-          location: "Melbourne, Victoria, Australia",
-          imageUrl: "https://www.departmentofproduct.com/wp-content/uploads/2016/12/System-overview.png",
-        },
-      ]
+  async mounted() {
+    if (this.isAuthenticated) {
+      this.loadWhiteboards()
     }
   },
   filters: {
@@ -108,14 +79,36 @@ export default {
       return date.formatDate(value, 'MMMM D h:mmA')
     }
   },
+  components: {
+    // 'buttons': require('../components/button.vue').default
+  },
+  computed: {
+    ...mapState({
+      whiteboards: (state) => state.whiteboards.whiteboards,
+      user: (state) => state.profile.user
+    }),
+    ...mapGetters('profile', ['isAuthenticated'])
+  },
   methods: {
+    // ...mapActions("whiteboards", ["fetchPosts"]),
+    async loadWhiteboards() {
+      try {
+        if (this.isAuthenticated) {
+          await this.$store.dispatch('whiteboards/fetchPosts')
+        }
+      } catch (error) {
+        console.error(error)
+        this.$q.notify(
+          `Error while fetching results - Check browser console messages`
+        )
+      }
+    }, 
     async logout() {
       await this.$store.dispatch("auth/logout");
       this.$router.push("/");
     }
   },
-  }
-
+}
 </script>
 
 <style lang="sass">
