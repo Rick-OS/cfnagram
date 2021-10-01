@@ -38,7 +38,7 @@
         <q-input
           v-model="post.projectname"
           class="col col-sm-6"
-          label="Project Name"
+          label="Album Name"
           dense></q-input
           >
       </div>
@@ -70,7 +70,20 @@
         </q-input>
       </div>
       <div class="row justify-center q-ma-md">
-        <q-btn unelevated rounded color="primary" label="Upload " />
+        <q-btn 
+          v-if="hasCameraSupport"
+          @click="getPredictions()" 
+          unelevated rounded color="primary" label="Process Image" />
+      </div>
+      <div class="q-pa-md q-gutter-sm">
+        <div>
+          <q-toggle
+            v-model="imagesProtected"
+            color="blue"
+            unchecked-icon="clear"
+            label="Keep Image Private"
+          />
+        </div>
       </div>
     </div>
   </q-page>
@@ -78,9 +91,13 @@
 
 <script>
 import { uid } from 'quasar'
-import Amplify, { Auth, Storage } from 'aws-amplify';
+import Amplify, { Auth, Storage, Predictions, API } from 'aws-amplify';
+import { AmazonAIPredictionsProvider } from '@aws-amplify/predictions';
 import { Logger } from '@aws-amplify/core'
 import { mapState, mapGetters } from 'vuex'
+// import query definition
+import { createPost } from '../graphql/mutations'
+Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
 export default {
   name: 'PageCamera',
@@ -93,12 +110,16 @@ export default {
         projectname:'',
         location:'',
         photo:null,
-        date:Date.now()
+        date:Date.now(),
+        signedImageUrl: ''
       },
       imageCaptured: false,
       imageUpload: [],
       hasCameraSupport: true,
-      locationLoading: false
+      locationLoading: false,
+      imagesProtected: true,
+      protectionLevel: 'protected',
+      imageFilename: ''
     }
   },
   computed: {
@@ -135,9 +156,9 @@ export default {
       context.drawImage(video, 0, 0, canvas.width, canvas.height)
       console.log("CapturedImaged")
       this.imageCaptured = true
-      
       this.post.photo = this.dataURItoBlob(canvas.toDataURL())
-      let imageblob = this.post.photo
+      const imageblob = this.post.photo
+      // Temporaray call to uploadImage as part of the Image Capture. This should be moved to the Upload button
       this.uploadImage(imageblob)
       this.disableCamera()
     },
@@ -148,7 +169,6 @@ export default {
     },
     captureImageFallback(file) {
       this.post.photo = file
-      
       let canvas = this.$refs.canvas
       let context = canvas.getContext('2d')
       var reader = new FileReader();
@@ -222,8 +242,7 @@ export default {
       this.locationLoading = false
     },
     uploadImage(blob){
-      
-      if (this.post.customername && this.post.customername){
+      if (this.post.customername && this.post.projectname){
         var filename = `${ this.post.customername }/${ this.post.projectname }/${ this.post.capturedimage }-${Date.now("dd-mm-yyyy")}.jpg`.toLowerCase();
       }else if(this.post.projectname){
         var filename = `${ this.post.projectname }/${ this.post.capturedimage }-${Date.now("dd-mm-yyyy")}.jpg`.toLowerCase();
@@ -231,9 +250,53 @@ export default {
         var filename = `${ this.post.capturedimage }-${Date.now("dd-mm-yyyy")}.jpg`.toLowerCase();
       }
       console.log("Filename: ", filename)
-      let s3Upload = Amplify.Storage.vault.put(filename, blob, {
-      contentType: 'iamge/jpg'
-      });   
+      this.imageFilename = filename
+      if (this.imagesProtected === false) {
+        this.protectionLevel = 'public'
+      }
+      console.log("Protection Level: ", this.protectionLevel)
+      const s3Upload = Storage.put(filename, blob, {
+          level: this.protectionLevel,
+          contentType: 'image/jpg'
+      });
+      Storage.get(filename).then(ResponseData => {
+      this.post.signedImageUrl = ResponseData
+      console.log("Signed Url : ", this.post.signedImageUrl)
+      })
+    },
+    async getPredictions(){
+      /* -- PREDICTIONS -- */
+      console.log('asking for predictions');
+      const predicted = await Predictions.identify({
+        labels: {
+            source: {
+                key: this.imageFilename,
+                level: this.protectionLevel  // Adding Level key for public or protected files
+            },
+            type: "ALL"
+          }
+        });
+      console.log('predicted: ');
+      console.log(predicted);
+      let predictedLabel = ' ';
+      for (let label of predicted.labels) {
+        console.log(label);
+        if(label.metadata?.confidence > 90.0) {
+            predictedLabel +='#' + label.name + ' ';
+        }
+      }
+      /* --- end PREDICTIONS --- */
+      // const postId = uid();
+      const postDescription = predictedLabel;
+      const postInfo = { name: this.post.capturedimage, description: postDescription, location: this.post.location, image: this.post.signedImageUrl, id: this.post.id };
+      console.log("post info is");
+      console.log(postInfo)
+      const CreatePostResponse = API.graphql({
+        query: createPost,
+        variables: { input: postInfo },
+        authMode: 'AMAZON_COGNITO_USER_POOLS'
+      });
+      console.log(CreatePostResponse)
     }
   },
   mounted() {
