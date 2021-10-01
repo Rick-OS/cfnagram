@@ -59,6 +59,7 @@ export default function (/* { store, ssrContext } */) {
           next({ name: 'auth', query: { redirectTo: to.name } })
         }
       }
+      else next()
     }
     else next()
   })
