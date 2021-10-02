@@ -49,12 +49,14 @@ export default {
     Hub.listen(authMessageChannel, (data) => {
       const event = data.payload?.event ?? ''
       const message = data.payload?.message ?? ''
+      console.log("Event: ", event)
 
       // Ignore message if customer hasn't attempted to login yet
       if (message === noAuthMessage) return
-
+      
       if (event === 'ToastAuthError') {
-        this.$q.notify(message)
+        //this.$q.notify(message)
+        console.log("Message: ", message)
       }
     })
   },
