@@ -251,15 +251,19 @@ export default {
       }
       console.log("Filename: ", filename)
       this.imageFilename = filename
+      // Setting the Protection Level based on Form Toggle v-model: imagesProtected
       if (this.imagesProtected === false) {
         this.protectionLevel = 'public'
       }
       console.log("Protection Level: ", this.protectionLevel)
+      // Uploading file to S3
       const s3Upload = Storage.put(filename, blob, {
           level: this.protectionLevel,
           contentType: 'image/jpg'
       });
-      Storage.get(filename).then(ResponseData => {
+      // Grabbing a Presigned Key for Downloading files from S3 -
+      // #TODO - This needs to be moved into the onMounted hook as these are time bound
+      Storage.get(filename, {level: this.protectionLevel}).then(ResponseData => {
       this.post.signedImageUrl = ResponseData
       console.log("Signed Url : ", this.post.signedImageUrl)
       })
