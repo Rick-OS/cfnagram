@@ -1,7 +1,6 @@
 <template>
   <q-page class="constrain-camera q-pa-md">
     <div class="camera-frame q-pa-md">
-
       <video ref= "video" v-show="!imageCaptured" class="full-width" autoplay />
       <canvas ref= "canvas" v-show="imageCaptured" class="full-width" height="240" />
     </div>
@@ -110,7 +109,7 @@ export default {
         projectname:'',
         location:'',
         photo:null,
-        date:Date.now(),
+        date:Date.now(),  
         signedImageUrl: ''
       },
       imageCaptured: false,
@@ -263,10 +262,11 @@ export default {
       });
       // Grabbing a Presigned Key for Downloading files from S3 -
       // #TODO - This needs to be moved into the onMounted hook as these are time bound
-      Storage.get(filename, {level: this.protectionLevel}).then(ResponseData => {
-      this.post.signedImageUrl = ResponseData
-      console.log("Signed Url : ", this.post.signedImageUrl)
-      })
+      // Storage.get(filename, {level: this.protectionLevel}).then(ResponseData => {
+      // this.post.signedImageUrl = ResponseData
+      // console.log("Signed Url : ", this.post.signedImageUrl)
+      // })
+      this.post.signedImageUrl = this.getPreSignedUrl(filename, this.protectionLevel)
     },
     async getPredictions(){
       /* -- PREDICTIONS -- */
@@ -291,8 +291,8 @@ export default {
       }
       /* --- end PREDICTIONS --- */
       // const postId = uid();
-      const postDescription = predictedLabel;
-      const postInfo = { name: this.post.capturedimage, description: postDescription, location: this.post.location, image: this.post.signedImageUrl, id: this.post.id };
+      const imagePredictions = predictedLabel;
+      const postInfo = { id: this.post.id, name: this.post.capturedimage, predictions: imagePredictions, location: this.post.location, imageFilename: this.imageFilename, imageAccessLevel: this.protectionLevel, imageUrl: this.post.signedImageUrl};
       console.log("post info is");
       console.log(postInfo)
       const CreatePostResponse = API.graphql({
@@ -301,7 +301,19 @@ export default {
         authMode: 'AMAZON_COGNITO_USER_POOLS'
       });
       console.log(CreatePostResponse)
-    }
+    },
+    async getPreSignedUrl(filename, protectionLevel) {
+    // Grabbing a Presigned Key for Downloading files from S3 -
+    // #TODO - This needs to be moved into the onMounted hook as these are time bound
+    try {
+      await Storage.get(filename, {level: protectionLevel}).then(ResponseData => {
+      this.post.signedImageUrl = ResponseData
+      console.log("Signed Url : ", this.post.signedImageUrl)
+      })
+    } catch (error) {
+        console.log("Unable to process S3 Presigned Url : ", error)
+      }
+    },
   },
   mounted() {
     this.initCamera()

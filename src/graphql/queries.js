@@ -7,10 +7,14 @@ export const getPost = /* GraphQL */ `
       id
       name
       location
-      description
-      image
+      predictions
+      imageFilename
+      imageAccessLevel
+      imageUrl
       createdAt
       updatedAt
+      up_votes
+      down_votes
     }
   }
 `;
@@ -25,10 +29,37 @@ export const listPosts = /* GraphQL */ `
         id
         name
         location
-        description
-        image
+        predictions
+        imageFilename
+        imageAccessLevel
+        imageUrl
         createdAt
         updatedAt
+        up_votes
+        down_votes
+      }
+      nextToken
+    }
+  }
+`;
+export const getVids = /* GraphQL */ `
+  query getVids(
+    $filter: VodFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getVids(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        event_location
+        down_votes
+        guid
+        hlsUrl
+        event_Description
+        imageAccessLevel
+        imageFilename
+        imageUrl
+        srcVideo
+        up_votes
       }
       nextToken
     }

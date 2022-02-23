@@ -10,8 +10,10 @@ export const createPost = /* GraphQL */ `
       id
       name
       location
-      description
-      image
+      predictions
+      imageFilename
+      imageAccessLevel
+      imageUrl
       createdAt
       updatedAt
     }
@@ -26,8 +28,10 @@ export const updatePost = /* GraphQL */ `
       id
       name
       location
-      description
-      image
+      predictions
+      imageFilename
+      imageAccessLevel
+      imageUrl
       createdAt
       updatedAt
     }
@@ -42,10 +46,46 @@ export const deletePost = /* GraphQL */ `
       id
       name
       location
-      description
-      image
+      predictions
+      imageFilename
+      imageAccessLevel
+      imageUrl
       createdAt
       updatedAt
     }
   }
+`;
+
+export const upvotePost = /* GraphQL */`
+  mutation upvotePost(
+    $input: VodInput!
+    ) {
+      upvotePost(input: $input) {
+        guid
+        up_votes
+        down_votes
+        imageFilename
+        event_location
+        srcVideo
+        imageAccessLevel
+        imageUrl
+      }
+    }
+`;
+
+export const downvotePost = /* GraphQL */`
+  mutation downvotePost(
+    $input: VodInput!
+    ) {
+      downvotePost(input: $input) {
+        guid
+        up_votes
+        down_votes
+        imageFilename
+        event_location
+        srcVideo
+        imageAccessLevel
+        imageUrl
+      }
+    }
 `;

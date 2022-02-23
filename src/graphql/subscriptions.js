@@ -7,8 +7,10 @@ export const onCreatePost = /* GraphQL */ `
       id
       name
       location
-      description
-      image
+      predictions
+      imageFilename
+      imageAccessLevel
+      imageUrl
       createdAt
       updatedAt
     }
@@ -20,8 +22,10 @@ export const onUpdatePost = /* GraphQL */ `
       id
       name
       location
-      description
-      image
+      predictions
+      imageFilename
+      imageAccessLevel
+      imageUrl
       createdAt
       updatedAt
     }
@@ -33,8 +37,10 @@ export const onDeletePost = /* GraphQL */ `
       id
       name
       location
-      description
-      image
+      predictions
+      imageFilename
+      imageAccessLevel
+      imageUrl
       createdAt
       updatedAt
     }

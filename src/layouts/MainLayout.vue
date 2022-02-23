@@ -73,16 +73,16 @@
 <script>
 import { auth_logout } from 'src/boot/amplify';
 import { auth } from '../pages/Authentication'
-import { mapGetters } from "vuex";
+import { mapGetters } from "vuex"
+
 
 export default {
   name: 'MainLayout',
-  
   data () {
     return {
 
     }
-  },
+  },  
   computed: {
     ...mapGetters({
       user: "auth/user",
