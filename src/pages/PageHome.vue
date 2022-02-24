@@ -4,7 +4,7 @@
       <div class="col-12 col-sm-8">
         <template v-if="!loadingPosts && whiteboards.length">
           <q-card
-            v-for="post in whiteboards"
+            v-for="post,index in whiteboards"
             :key = "post.guid"
             class="my-card q-mb-md"
             bordered
@@ -47,14 +47,14 @@
                 flat 
                 round 
                 :label=post.up_votes
-                @click="addUpVote(post.guid)"
+                @click="addUpVote(post.guid, index)"
                 color="blue" 
                 icon="thumb_up_alt" 
               />
               <q-btn 
                 flat round 
                 :label=post.down_votes
-                @click="addDownVote(post.guid)"
+                @click="addDownVote(post.guid, index)"
                 color="red" 
                 icon="thumb_down_alt" />
             </q-card-actions>
@@ -138,24 +138,13 @@ export default {
         )
       }
     },
-    async addUpVote(id) {
-      console.log(id)
-      var arrayIndex = ''
-      if(id == '05c0f223-be12-4082-83a0-5f6397fce370'){
-        arrayIndex = 0
-      }else{arrayIndex = 1}
-      this.$store.commit('whiteboards/incrementVotes',arrayIndex)
-      await this.$store.dispatch('whiteboards/upvote', id)
+    async addUpVote(guid, index) {
+      this.$store.commit('whiteboards/incrementVotes',index)
+      await this.$store.dispatch('whiteboards/upvote', guid)
     }, 
-    async addDownVote(id) {
-      console.log(id)
-      var arrayIndex = ''
-      if(id == '05c0f223-be12-4082-83a0-5f6397fce370'){
-        arrayIndex = 0
-      }else{arrayIndex = 1}
-      this.$store.commit('whiteboards/decrementVotes',arrayIndex)
-      await this.$store.dispatch('whiteboards/downvote', id)
-      
+    async addDownVote(guid, index) {
+      this.$store.commit('whiteboards/decrementVotes',index)
+      await this.$store.dispatch('whiteboards/downvote', guid)
     }, 
     async logout() {
       await this.$store.dispatch("auth/logout");
