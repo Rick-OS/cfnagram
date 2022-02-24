@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar class="constrain">
-        <q-btn
+        <!-- <q-btn
           to="/camera"
           class="large-screen-only q-mr-sm"
           color="white-10"
@@ -10,14 +10,14 @@
           size="20px"
           flat
           round
-        />
+        /> -->
         <q-separator
           class="large-screen-only"
           spaced
           vertical
         />
         <q-toolbar-title class="text-grand-hotel">
-          cfn-agram
+          Instant Replays
         </q-toolbar-title>
         <q-btn
           to="/"
