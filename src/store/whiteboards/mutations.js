@@ -15,8 +15,13 @@ const decrementVotes = (state, postId) => {
     console.log("Updating Array index", postId)
     state.whiteboards[(postId)].down_votes++
 }
+
+const voteStats = (state, voteData) => {
+    state.voteData = voteData;
+};
 export {
     fetchPosts,
     incrementVotes,
-    decrementVotes
+    decrementVotes,
+    voteStats
 };

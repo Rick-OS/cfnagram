@@ -89,3 +89,19 @@ export const downvotePost = /* GraphQL */`
       }
     }
 `;
+
+export const createVodVotes = /* GraphQL */ `
+  mutation createVodVotes(
+    $input: CreateVodVotesInput!
+  ) {
+    createVodVotes(input: $input) {
+      vote
+      videoid
+      userid
+      voteid
+      createdAt
+      location
+      event
+    }
+  }
+`;

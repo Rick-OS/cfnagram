@@ -42,11 +42,12 @@
               </div>
             </q-card-section>
             <q-card-actions >
+              <div class=" text-grey-6 text-bold">Is this gold medal worthly?. Decide with votes</div>
               <q-btn 
                 flat 
-                round 
+                round
                 :label=post.up_votes
-                @click="addUpVote(post.guid, index)"
+                @click="addUpVote(post.guid, index, post.event_location, post.event_Description)"
                 color="blue" 
                 icon="thumb_up_alt" 
               />
@@ -83,8 +84,7 @@
         </q-item>
         
         <q-card class="my-card">
-      <q-img src="../assets/images/summary.png" />
-
+      <!-- <q-img src="../assets/images/summary.png" /> -->
       <q-card-section>
         <q-btn
           fab
@@ -95,8 +95,8 @@
         />
 
         <div class="row no-wrap items-center">
-          <div class="col text-h6 ellipsis">
-            Replay Voting Statistics
+          <div class="col ellipsis text-grey-9 text-bold">
+            My Voting Statistics
           </div>
           <div class="col-auto text-grey text-caption q-pt-md row no-wrap items-center">
             <q-icon name="vote" />
@@ -105,38 +105,18 @@
 
         <!-- <q-rating v-model="stars" :max="5" size="32px" /> -->
       </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        <div class="text-subtitle1">
-         Voting By category
-        </div>
-        <div class="text-caption text-grey">
-          Ice Skating - 7%
-        </div>
-        <div class="text-caption text-grey">
-          Snow Boarding - 47%
-        </div>
-        <div class="text-caption text-grey">
-          Curling - 1%
-        </div>
-        <div class="text-caption text-grey">
-          Luge - 1%
-        </div>
-        <div class="text-caption text-grey">
-          Ski Jumping - 1%
-        </div>
-        <div class="text-caption text-grey">
-          Bobsleigh - 1%
-        </div>
-        <div class="text-caption text-grey">
-          Ice Hockey - 1%
+      <q-card-section >
+        <div v-for="item, index in voteData" :key="index">
+          <q-badge outline align="middle" color="primary">
+          {{ index }} - {{item}}
+          </q-badge>  
         </div>
       </q-card-section>
     
       <q-separator />
       <q-card-actions>
         <q-btn flat round icon="leaderboard" />
-        <q-btn flat color="Primary" @click="openLink('https://ap-southeast-2.quicksight.aws.amazon.com/sn/analyses/13e5a84d-18ab-4938-9215-3e006550c44c')">
+        <q-btn flat color="Primary" @click="openLink('https://us-east-1.quicksight.aws.amazon.com/sn/dashboards/d43dbd8a-0e6a-4e10-9105-08047724ce8e')">
         Goto Voting Dashboard
         </q-btn>
       </q-card-actions>
@@ -151,6 +131,7 @@ import { openURL } from 'quasar'
 import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
 import { date } from 'quasar'
 import whiteboards from 'src/store/whiteboards';
+import { firstName, userId } from 'src/store/profile/getters';
 export default {
   data() {
     return {
@@ -160,9 +141,10 @@ export default {
 
   name: 'PageHome',
   async mounted() {
+    const username = this.username
     if (this.isAuthenticated) {
       this.loadingPosts = true
-      // this.loadWhiteboards()
+      this.loadWhiteboards(username)
     }
   },
   filters: {
@@ -176,17 +158,16 @@ export default {
   computed: {
     ...mapState({
       whiteboards: (state) => state.whiteboards.whiteboards,
-      user: (state) => state.profile.user
+      user: (state) => state.profile.user,
+      voteData: (state) => state.whiteboards.voteData
     }),
-    ...mapGetters('profile', ['isAuthenticated'])
+    ...mapGetters('profile', ['isAuthenticated', 'username'])
   },
   methods: {
-    // ...mapMutations(['incrementVotes']),
-    // ...mapActions("whiteboards", ["fetchPosts"]),
-    async loadWhiteboards() {
+    async loadWhiteboards(username) {
       try {
         if (this.isAuthenticated) {
-          await this.$store.dispatch('whiteboards/fetchPosts')
+          await this.$store.dispatch('whiteboards/fetchPosts', username)
           this.loadingPosts = false
         }
       } catch (error) {
@@ -197,9 +178,15 @@ export default {
         )
       }
     },
-    async addUpVote(guid, index) {
+    async addUpVote(guid, index, location, description) {
+      const objectdata = {}
+      objectdata.username = this.username
+      objectdata.Id = guid
+      objectdata.eventlocation = location
+      objectdata.eventdescription = description
+      console.log("ObjectData",objectdata)
       this.$store.commit('whiteboards/incrementVotes',index)
-      await this.$store.dispatch('whiteboards/upvote', guid)
+      await this.$store.dispatch('whiteboards/upvote', objectdata)
     }, 
     async addDownVote(guid, index) {
       this.$store.commit('whiteboards/decrementVotes',index)

@@ -34,3 +34,7 @@ export const lastName = (state) => {
 export const userAttributes = (state) => {
   return state.user.attributes ?? 'no attributes'
 }
+
+export const username = (state) => {
+  return state.user.username ?? 'no attributes'
+}

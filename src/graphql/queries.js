@@ -65,3 +65,18 @@ export const getVids = /* GraphQL */ `
     }
   }
 `;
+export const listVodVotes = /* GraphQL */ `
+  query listVodVotes(
+    $filter: TableVodVotesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listVodVotes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        location
+        event
+      }
+      nextToken
+    }
+  }
+`;
